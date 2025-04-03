@@ -93,7 +93,7 @@ export default function AccountPage() {
 
     useEffect(() => {
         getUser();
-    }, []);
+    }, [getUser]);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);

@@ -9,30 +9,6 @@ import SecurityIcon from '@mui/icons-material/Security';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export default function HomePage() {
-  const theme = useTheme();
-
-  const features = [
-    {
-      title: 'User Management',
-      description: 'Create and manage user accounts with ease.',
-      icon: <PersonIcon sx={{ fontSize: 40 }} />,
-    },
-    {
-      title: 'Authentication',
-      description: 'Secure authentication system for user access.',
-      icon: <LockIcon sx={{ fontSize: 40 }} />,
-    },
-    {
-      title: 'Dashboard Access',
-      description: 'Access your personal dashboard to view account details.',
-      icon: <DashboardIcon sx={{ fontSize: 40 }} />,
-    },
-    {
-      title: 'Security',
-      description: 'Maintain account security with profile management options.',
-      icon: <SecurityIcon sx={{ fontSize: 40 }} />,
-    },
-  ];
 
   return (
       <Box>

@@ -2,22 +2,41 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Container,
+    Divider,
+    IconButton,
+    InputAdornment,
+    Paper,
+    TextField,
+    Typography,
+} from '@mui/material';
+import BalanceIcon from '@mui/icons-material/Balance';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import EmailIcon from '@mui/icons-material/Email';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 export default function LoginPage() {
-    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
+    const router = useRouter();
     const supabase = createClientComponentClient();
-
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
         setLoading(true);
+        setError(null);
 
         try {
             const { error } = await supabase.auth.signInWithPassword({
@@ -39,53 +58,128 @@ export default function LoginPage() {
         }
     };
 
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-            <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+        <Container component="main" maxWidth="xs">
+            <Paper
+                elevation={6}
+                sx={{
+                    mt: 8,
+                    p: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    backgroundColor: 'background.paper',
+                    borderRadius: 2,
+                    borderTop: '4px solid',
+                    borderColor: 'primary.main',
+                }}
+            >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 3,
+                    }}
+                >
+                    <BalanceIcon sx={{ fontSize: 40, color: 'primary.main', mr: 1 }} />
+                    <Typography component="h1" variant="h5" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+                        SISA LAW
+                    </Typography>
+                </Box>
 
-            {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    {error}
-                </div>
-            )}
+                <Typography component="h2" variant="h5" sx={{ mb: 3 }}>
+                    Sign In
+                </Typography>
 
-            <form onSubmit={handleLogin}>
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-gray-700 mb-2">
-                        Email
-                    </label>
-                    <input
+                {error && (
+                    <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+                        {error}
+                    </Alert>
+                )}
+
+                <Box component="form" onSubmit={handleLogin} sx={{ width: '100%' }}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
                         id="email"
-                        type="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <EmailIcon sx={{ color: 'text.secondary' }} />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                </div>
 
-                <div className="mb-6">
-                    <label htmlFor="password" className="block text-gray-700 mb-2">
-                        Password
-                    </label>
-                    <input
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type={showPassword ? 'text' : 'password'}
                         id="password"
-                        type="password"
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <LockOutlinedIcon sx={{ color: 'text.secondary' }} />
+                                </InputAdornment>
+                            ),
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handlePasswordVisibility}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                </div>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                >
-                    {loading ? 'Logging in...' : 'Login'}
-                </button>
-            </form>
-        </div>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        disabled={loading}
+                        sx={{ mt: 3, mb: 2, py: 1.5 }}
+                    >
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+                    </Button>
+
+                    <Divider sx={{ my: 2 }}>
+                        <Typography variant="body2" color="text.secondary">
+                            OR
+                        </Typography>
+                    </Divider>
+
+                    <Box sx={{ textAlign: 'center' }}>
+                        <Typography variant="body2" sx={{ mb: 2 }}>
+                            Don&apos;t have an account?{' '}
+                            <Link href="/auth/signup" style={{ color: '#D4AF37', textDecoration: 'none' }}>
+                                Sign Up
+                            </Link>
+                        </Typography>
+                    </Box>
+                </Box>
+            </Paper>
+        </Container>
     );
 }

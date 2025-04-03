@@ -1,13 +1,14 @@
-import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Navbar from "@/components/Navbar";
+import './globals.css';
+import ThemeProvider from "@/app/theme/ThemeProvider";
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Account Management App',
-    description: 'A simple app for account management including deletion',
+    title: 'Sisa@Law',
+    description: 'Sisa@Law',
 };
 
 export default function RootLayout({
@@ -18,10 +19,10 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body className={inter.className}>
-        <Navbar />
-        <main className="container mx-auto px-4 py-8">
+        <ThemeProvider>
+            <Navbar />
             {children}
-        </main>
+        </ThemeProvider>
         </body>
         </html>
     );

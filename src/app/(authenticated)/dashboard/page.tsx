@@ -16,14 +16,15 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient, User } from "@supabase/auth-helpers-nextjs";
 
 export default function DashboardPage() {
-    const [user, setUser] = useState<any>(null);
+
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [deleteRequested, setDeleteRequested] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error] = useState<string | null>(null);
     const supabase = createClientComponentClient();
 
 

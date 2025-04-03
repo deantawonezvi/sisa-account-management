@@ -25,7 +25,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import LockIcon from '@mui/icons-material/Lock';
 import SecurityIcon from '@mui/icons-material/Security';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient, User } from "@supabase/auth-helpers-nextjs";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -54,7 +54,8 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export default function AccountPage() {
-    const [user, setUser] = useState<any>(null);
+
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [profileLoading, setProfileLoading] = useState(false);
     const [passwordLoading, setPasswordLoading] = useState(false);
@@ -103,6 +104,7 @@ export default function AccountPage() {
         setProfileError(null);
 
         try {
+            if(!user) return;
             const { error } = await supabase.auth.updateUser({
                 data: {
                     first_name: firstName,
@@ -117,8 +119,9 @@ export default function AccountPage() {
             setSuccessMessage('Profile updated successfully');
             setShowSuccessMessage(true);
             setEditMode(false);
-        } catch (error: any) {
-            setProfileError(error.message || 'An error occurred updating your profile');
+        } catch (error) {
+            setProfileError((error as Error).message || 'An error occurred updating your profile');
+
         } finally {
             setProfileLoading(false);
         }
@@ -154,8 +157,9 @@ export default function AccountPage() {
             setConfirmNewPassword('');
             setSuccessMessage('Password updated successfully');
             setShowSuccessMessage(true);
-        } catch (error: any) {
-            setPasswordError(error.message || 'An error occurred updating your password');
+        } catch (error) {
+
+            setPasswordError((error as Error).message || 'An error occurred updating your password');
         } finally {
             setPasswordLoading(false);
         }

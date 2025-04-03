@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
     Alert,
     Avatar,
@@ -54,7 +54,6 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export default function AccountPage() {
-
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [profileLoading, setProfileLoading] = useState(false);
@@ -74,8 +73,7 @@ export default function AccountPage() {
 
     const supabase = createClientComponentClient();
 
-
-    const getUser = async () => {
+    const getUser = useCallback(async () => {
         try {
             const { data } = await supabase.auth.getSession();
             if (data.session) {
@@ -89,7 +87,7 @@ export default function AccountPage() {
             console.error('Error fetching user:', error);
             setLoading(false);
         }
-    };
+    }, [supabase.auth]);
 
     useEffect(() => {
         getUser();
@@ -158,7 +156,6 @@ export default function AccountPage() {
             setSuccessMessage('Password updated successfully');
             setShowSuccessMessage(true);
         } catch (error) {
-
             setPasswordError((error as Error).message || 'An error occurred updating your password');
         } finally {
             setPasswordLoading(false);

@@ -1,12 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Box, Button, Card, CardContent, Container, Grid, Typography, useTheme, } from '@mui/material';
+import { Box, Button, Card, CardContent, Container, Grid, Typography, } from '@mui/material';
 import BalanceIcon from '@mui/icons-material/Balance';
-import PersonIcon from '@mui/icons-material/Person';
-import LockIcon from '@mui/icons-material/Lock';
-import SecurityIcon from '@mui/icons-material/Security';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export default function HomePage() {
 
